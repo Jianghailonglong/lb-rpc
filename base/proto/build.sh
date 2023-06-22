@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/sh
 
 # proto编译
 protoc --cpp_out=. ./*.proto
@@ -15,4 +14,3 @@ do
     mv $file ${name}.${newsuffix}
 done
 echo "build proto file successd!"
-
