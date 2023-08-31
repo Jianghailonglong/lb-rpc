@@ -31,9 +31,11 @@ public:
     int register_msg_router(int msgid, msg_callback *msg_cb, void *user_data) 
     {
         if(_router.find(msgid) != _router.end()) {
+            printf("回调函数已存在");
             // 该msgID的回调业务已经存在
             return -1;
         }
+        printf("add msg cb msgid = %d\n", msgid);
 
         _router[msgid] = msg_cb;
         _args[msgid] = user_data;

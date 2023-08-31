@@ -10,10 +10,12 @@ class UDPServer :public NetConnection
 public:
     UDPServer(EventLoop *loop, const char *ip, uint16_t port);
 
-    virtual int send_message(const char *data, int msglen, int msgid);
+    int send_message(const char *data, int msglen, int msgid);
 
     // 注册消息路由回调函数
     void add_msg_router(int msgid, msg_callback* cb, void *user_data = NULL);
+
+    int get_fd();
 
     ~UDPServer();
 

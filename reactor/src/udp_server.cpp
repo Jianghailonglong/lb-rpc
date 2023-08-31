@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "udp_server.h"
-
+#include <iostream>
 
 void read_callback(EventLoop *loop, int fd, void *args)
 {
@@ -24,13 +24,16 @@ void UDPServer::do_read()
         int pkg_len = recvfrom(_sockfd, _read_buf, sizeof(_read_buf), 0, (struct sockaddr *)&_client_addr, &_client_addrlen);
 
         if (pkg_len == -1) {
+
             if (errno == EINTR) {
                 continue;
             }
             else if (errno == EAGAIN) {
+                std::cout << "EAGAIN" << std::endl;
                 break;
             }
             else {
+                std::cout << "recvfrom error" << std::endl;
                 perror("recvfrom\n");
                 break;
             }
@@ -120,6 +123,7 @@ int UDPServer::send_message(const char *data, int msglen, int msgid)
 // 注册消息路由回调函数
 void UDPServer::add_msg_router(int msgid, msg_callback* cb, void *user_data)
 {
+    std::cout << "udp server add_msg_router" << std::endl;
     _router.register_msg_router(msgid, cb, user_data);
 }
 
@@ -127,4 +131,9 @@ UDPServer::~UDPServer()
 {
     _loop->del_io_event(_sockfd);
     close(_sockfd);
+}
+
+int UDPServer::get_fd()
+{
+    return this->_sockfd;
 }

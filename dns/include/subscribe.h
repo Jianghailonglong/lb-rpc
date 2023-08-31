@@ -6,7 +6,7 @@
 #include <ext/hash_set>
 #include <ext/hash_map>
 #include "reactor.h"
-#include "lbrpc.pb.h"
+#include "lbrss.pb.h"
 #include "dns_route.h"
 
 using namespace __gnu_cxx;

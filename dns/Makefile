@@ -24,7 +24,7 @@ LIB= $(MYSQL_LIB) -L$(REACTOR_LIB) $(OTHER_LIB)
 
 
 OBJS = $(addsuffix .o, $(basename $(wildcard $(SRC)/*.cpp)))
-OBJS += $(PROTO)/lbrpc.pb.o
+OBJS += $(PROTO)/lbrss.pb.o
 
 $(TARGET): $(OBJS)
 	mkdir -p bin

@@ -280,7 +280,6 @@ void Route::remove_changes(bool remove_all)
         fprintf(stderr, "delete RouteChange: %s\n", mysql_error(&db_conn_));
         return ;
     } 
-
     return;
 }
 
@@ -313,7 +312,6 @@ void *check_route_changes(void *args)
             }
 
             // 2.3 获取被修改的modid/cmdid对应的订阅客户端,进行推送   
-            // TODO，获取改变的modid/cmdid，是不是可以使用SET来简化      
             std::unordered_set<uint64_t> changes;
             Route::instance()->load_changes(changes);
 
@@ -322,7 +320,6 @@ void *check_route_changes(void *args)
 
             // 2.4 删除当前版本之前的修改记录
             Route::instance()->remove_changes();
-
         }
         else {
             // 3 如果没有修改

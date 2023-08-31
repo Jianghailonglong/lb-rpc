@@ -20,7 +20,7 @@ LIB= $(MYSQL_LIB) -L$(REACTOR_LIB) $(OTHER_LIB)
 
 
 OBJS = dns_test.o
-OBJS += $(PROTO)/lbrpc.pb.o
+OBJS += $(PROTO)/lbrss.pb.o
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CFLAGS) -o $(TARGET) $(OBJS) $(INC) $(LIB)

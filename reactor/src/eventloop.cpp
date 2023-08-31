@@ -4,7 +4,7 @@
 // 构造，初始化epoll堆
 EventLoop::EventLoop() 
 {
-    //flag=0 等价于epll_craete
+    // flag=0 等价于epll_craete
     _epfd = epoll_create1(0);
     if (_epfd == -1) {
         fprintf(stderr, "epoll_create error\n");
@@ -51,12 +51,12 @@ void EventLoop::event_process()
             IOEvent *ev = &(ev_it->second);
 
             if (_fired_evs[i].events & EPOLLIN) {
-                // 读事件，掉读回调函数
+                // 读事件，读回调函数
                 void *args = ev->rcb_args;
                 ev->read_callback(this, _fired_evs[i].data.fd, args);
             }
             else if (_fired_evs[i].events & EPOLLOUT) {
-                // 写事件，掉写回调函数
+                // 写事件，写回调函数
                 void *args = ev->wcb_args; 
                 ev->write_callback(this, _fired_evs[i].data.fd, args);
             }

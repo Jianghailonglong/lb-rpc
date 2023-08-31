@@ -115,7 +115,7 @@ void push_change_task(EventLoop *loop, void *args)
             int cmdid = int(*st);
 
             // 组装pb消息，发送给客户
-            lbrpc::GetRouteResponse rsp; 
+            lbrss::GetRouteResponse rsp; 
             rsp.set_modid(modid);
             rsp.set_cmdid(cmdid);
 
@@ -123,7 +123,7 @@ void push_change_task(EventLoop *loop, void *args)
             host_set hosts = Route::instance()->get_hosts(modid, cmdid) ;
             for (host_set_it hit = hosts.begin(); hit != hosts.end(); hit++) {
                 uint64_t ip_port_pair = *hit;
-                lbrpc::HostInfo host_info;
+                lbrss::HostInfo host_info;
                 host_info.set_ip((uint32_t)(ip_port_pair >> 32));
                 host_info.set_port((int)ip_port_pair);
 
@@ -138,7 +138,7 @@ void push_change_task(EventLoop *loop, void *args)
             // 通过fd取出链接信息
             NetConnection *conn = TCPServer::conns[fd];
             if (conn != NULL) {
-                conn->send_message(responseString.c_str(), responseString.size(), lbrpc::ID_GetRouteResponse);
+                conn->send_message(responseString.c_str(), responseString.size(), lbrss::ID_GetRouteResponse);
             }
         }
     }

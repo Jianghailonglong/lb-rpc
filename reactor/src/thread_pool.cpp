@@ -105,11 +105,13 @@ ThreadPool::ThreadPool(int thread_cnt)
 
 ThreadQueue<TaskMsg>* ThreadPool::get_thread()
 {
+    ThreadQueue<TaskMsg>* thread = _queues[_index++];
+    
     if (_index == _thread_cnt) {
         _index = 0; 
     }
 
-    return _queues[_index];
+    return thread;
 }
 
 void ThreadPool::send_task(task_func func, void *args)

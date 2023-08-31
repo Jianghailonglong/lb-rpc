@@ -123,8 +123,8 @@ void TCPConn::do_read()
 // 处理写业务
 void TCPConn::do_write()
 {
-    // do_write是触发玩event事件要处理的事情，
-    // 应该是直接将out_buf力度数据io写会对方客户端 
+    // do_write是触发完event事件要处理的事情，
+    // 应该是直接将out_buf数据io写会对方客户端 
     // 而不是在这里组装一个message再发
     // 组装message的过程应该是主动调用
     

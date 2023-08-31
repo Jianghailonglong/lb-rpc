@@ -178,7 +178,7 @@ TCPServer::TCPServer(EventLoop* loop, const char *ip, uint16_t port)
 
     // 7、=============  创建线程池 ===============
     int thread_cnt = ConfigFile::instance()->GetNumber("reactor", "threadNum", 4);
-    std::cout << "thread_num: " << thread_cnt << std::endl;
+    std::cout << "tcp server thread_num: " << thread_cnt << std::endl;
     if(thread_cnt > 0)
     {
         _thread_pool = new ThreadPool(thread_cnt);

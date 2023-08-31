@@ -36,17 +36,17 @@ float ConfigFile::GetFloat(const std::string& section, const std::string& key, c
 {
     std::ostringstream convert1;
     convert1 << default_value;
-    //将浮点转换成字符串，然后按照字符串业务处理
+    // 将浮点转换成字符串，然后按照字符串业务处理
     std::string default_value_str = convert1.str();
     std::string text = GetString(section, key, default_value_str);
     std::istringstream convert2(text);
     float fresult;
-    if (!(convert2 >> fresult)) //如果Result放不下text对应的数字，执行将返回0；
+    if (!(convert2 >> fresult)) // 如果Result放不下text对应的数字，执行将返回0；
         fresult = 0;
     return fresult;
 }
 
-//价值配置文件
+// 加载配置文件
 bool ConfigFile::Load(const std::string& path)
 {
     std::ifstream ifs(path.c_str());

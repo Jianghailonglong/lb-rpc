@@ -2,7 +2,7 @@
 #include "reactor.h"
 #include "subscribe.h"
 #include "dns_route.h"
-#include "lbrpc.pb.h"
+#include "lbrss.pb.h"
 
 TCPServer *server;
 
@@ -14,7 +14,7 @@ typedef hash_set<uint64_t> client_sub_mod_list;
 void get_route(const char *data, uint32_t len, int msgid, NetConnection *conn, void *user_data)
 {
     // 1. 解析proto文件
-    lbrpc::GetRouteRequest req;
+    lbrss::GetRouteRequest req;
 
     req.ParseFromArray(data, len);
 
@@ -45,14 +45,14 @@ void get_route(const char *data, uint32_t len, int msgid, NetConnection *conn, v
     host_set hosts = Route::instance()->get_hosts(modid, cmdid);
 
     // 4. 将数据打包成protobuf
-    lbrpc::GetRouteResponse rsp;
+    lbrss::GetRouteResponse rsp;
 
     rsp.set_modid(modid);
     rsp.set_cmdid(cmdid);
     
     for (host_set_it it = hosts.begin(); it != hosts.end(); it ++) {
         uint64_t ip_port = *it;
-        lbrpc::HostInfo host;
+        lbrss::HostInfo host;
         host.set_ip((uint32_t)(ip_port >> 32));
         host.set_port((int)(ip_port));
         rsp.add_host()->CopyFrom(host);
@@ -62,7 +62,7 @@ void get_route(const char *data, uint32_t len, int msgid, NetConnection *conn, v
     // 5. 发送给客户端
     std::string responseString;
     rsp.SerializeToString(&responseString);
-    conn->send_message(responseString.c_str(), responseString.size(), lbrpc::ID_GetRouteResponse);
+    conn->send_message(responseString.c_str(), responseString.size(), lbrss::ID_GetRouteResponse);
 }
 
 // 订阅route 的modid/cmdid
@@ -89,6 +89,8 @@ void clear_subscribe(NetConnection * conn, void *args)
 
 int main(int argc, char **argv)
 {
+    printf("dns service ....\n");
+
     EventLoop loop;
 
     // 加载配置文件
@@ -105,7 +107,7 @@ int main(int argc, char **argv)
     server->set_conn_close(clear_subscribe);
 
     // 注册路由业务
-    server->add_msg_router(lbrpc::ID_GetRouteRequest, get_route);
+    server->add_msg_router(lbrss::ID_GetRouteRequest, get_route);
 
     // 开辟backend thread 周期性检查db数据库route信息的更新状态
     pthread_t tid;
@@ -119,7 +121,6 @@ int main(int argc, char **argv)
     pthread_detach(tid);
 
     // 开始事件监听    
-    printf("dns service ....\n");
     loop.event_process();
 
     return 0;

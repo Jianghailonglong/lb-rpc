@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include "reactor.h"
-#include "lbrpc.pb.h"
+#include "lbrss.pb.h"
 
 //命令行参数
 struct Option
@@ -43,21 +43,21 @@ void parse_option(int argc, char **argv)
 void on_connection(NetConnection *conn, void *args) 
 {
     //发送Route信息请求
-    lbrpc::GetRouteRequest req;
+    lbrss::GetRouteRequest req;
 
-    req.set_modid(1);
-    req.set_cmdid(1);
+    req.set_modid(2);
+    req.set_cmdid(2);
 
     std::string requestString;
 
     req.SerializeToString(&requestString);
-    conn->send_message(requestString.c_str(), requestString.size(), lbrpc::ID_GetRouteRequest);
+    conn->send_message(requestString.c_str(), requestString.size(), lbrss::ID_GetRouteRequest);
 }
 
 void deal_get_route(const char *data, uint32_t len, int msgid, NetConnection *net_conn, void *user_data)
 {
     //解包得到数据
-    lbrpc::GetRouteResponse rsp;
+    lbrss::GetRouteResponse rsp;
     rsp.ParseFromArray(data, len);
     
     //打印数据
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     client->set_conn_start(on_connection);
 
     //设置服务端回应包处理业务
-    client->add_msg_router(lbrpc::ID_GetRouteResponse, deal_get_route);
+    client->add_msg_router(lbrss::ID_GetRouteResponse, deal_get_route);
 
     loop.event_process(); 
 
